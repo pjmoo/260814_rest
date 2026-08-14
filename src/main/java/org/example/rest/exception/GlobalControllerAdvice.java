@@ -16,7 +16,7 @@ public class GlobalControllerAdvice {
     public ResponseEntity<String> handleNotFoundedException(NotFoundedException e) {
 //        return e.getMessage();
 //        return ResponseEntity.notFound().build();
-        return ResponseEntity
+        return ResponseEntity // 직접해줘야하는 구나
 //                .status(404)
                 .status(HttpStatus.NOT_FOUND)
                 .body(e.getMessage());

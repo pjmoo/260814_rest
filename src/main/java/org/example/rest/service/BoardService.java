@@ -30,7 +30,8 @@ public class BoardService {
     // Read (one)
     public BoardEntity readOne(UUID uuid) {
         return boardRepository.findByUuid(uuid)
-//                .orElseThrow();
+//                .orElseThrow(); // NoSuchElementException (?)
+                // -> ProblemDetail 처리 X
                 .orElseThrow(() -> new NotFoundedException(
                         "%s는 없는 게시물".formatted(uuid)));
     }
