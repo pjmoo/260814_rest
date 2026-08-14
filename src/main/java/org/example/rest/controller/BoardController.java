@@ -83,6 +83,9 @@ public class BoardController {
 
     @GetMapping
     @Operation(summary = "게시글 목록", description = "게시글 리스트")
+//    @CrossOrigin // 모두 접근 가능
+//    @CrossOrigin(origins = {"http://127.0.0.1:5500"})
+    // 컨트롤러 단위 혹은 메서드 단위로 할 수 있음 -> 파편화
     public ResponseEntity<List<BoardResponseDTO>> readAll() {
         List<BoardEntity> boards = boardService.readAll();
 
