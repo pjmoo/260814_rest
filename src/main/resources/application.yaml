@@ -7,6 +7,9 @@ spring:
     url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+  mvc:
+    problemdetails:
+      enabled: true
 # 배포 환경에서는 꺼놓는게 권장
 springdoc:
   api-docs:
@@ -25,7 +28,7 @@ spring:
 springdoc:
   api-docs:
     enabled: true
-#    path: /v3/api-docs
+  #    path: /v3/api-docs
   default-produces-media-type: application/json
 #  swagger-ui:
 #    path: /swagger-ui.html

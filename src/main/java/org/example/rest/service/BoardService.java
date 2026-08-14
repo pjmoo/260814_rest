@@ -3,6 +3,7 @@ package org.example.rest.service;
 import lombok.RequiredArgsConstructor;
 import org.example.rest.domain.entity.BoardEntity;
 import org.example.rest.domain.repository.BoardRepository;
+import org.example.rest.exception.NotFoundedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +29,10 @@ public class BoardService {
 
     // Read (one)
     public BoardEntity readOne(UUID uuid) {
-        return boardRepository.findByUuid(uuid).orElseThrow();
+        return boardRepository.findByUuid(uuid)
+//                .orElseThrow();
+                .orElseThrow(() -> new NotFoundedException(
+                        "%s는 없는 게시물".formatted(uuid)));
     }
 
     // Update

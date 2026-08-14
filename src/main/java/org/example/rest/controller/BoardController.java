@@ -142,4 +142,6 @@ public class BoardController {
         boardService.delete(uuid);
         return ResponseEntity.noContent().build();
     }
+
+//    @ExceptionHandler
 }
