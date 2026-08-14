@@ -30,4 +30,27 @@ public class BoardService {
     public BoardEntity readOne(UUID uuid) {
         return boardRepository.findByUuid(uuid).orElseThrow();
     }
+
+    // Update
+    @Transactional
+    public BoardEntity update(UUID uuid, BoardEntity boardEntity) {
+        BoardEntity entity = readOne(uuid); // 없으면 에러 나옴
+        entity.update(boardEntity);
+        return entity;
+    }
+
+    // Update Title
+    @Transactional
+    public BoardEntity updateTitle(UUID uuid, String title) {
+        BoardEntity entity = readOne(uuid); // 없으면 에러 나옴
+        entity.updateTitle(title);
+        return entity;
+    }
+
+    // Delete
+    @Transactional
+    public void delete(UUID uuid) {
+        BoardEntity entity = readOne(uuid); // 없을 때 에러처리
+        boardRepository.delete(entity);
+    }
 }

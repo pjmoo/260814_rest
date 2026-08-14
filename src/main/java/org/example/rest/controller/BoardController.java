@@ -37,8 +37,31 @@ public class BoardController {
     }
 
     @GetMapping("/{uuid}")
+    // long의 main id를 받아도 상관없는데... ResponseDTO를 통해서 uuid만 노출하기로 (이 실습에선 결정)
     public BoardResponseDTO readOne(@PathVariable UUID uuid) {
         BoardEntity boardEntity = boardService.readOne(uuid);
         return BoardResponseDTO.fromEntity(boardEntity);
+    }
+
+    @PutMapping("/{uuid}")
+    public BoardResponseDTO update(
+            @PathVariable UUID uuid,
+            @RequestBody BoardRequestDTO boardRequestDTO) {
+        // title, content를 한 번에 수정해줄 수 있는 형태
+        BoardEntity updated = boardService.update(uuid, boardRequestDTO.toEntity());
+        return BoardResponseDTO.fromEntity(updated);
+    }
+
+    @PatchMapping("/{uuid}/title")
+    public BoardResponseDTO updateTitle(
+            @PathVariable UUID uuid,
+            @RequestParam String title) {
+        BoardEntity updated = boardService.updateTitle(uuid, title);
+        return BoardResponseDTO.fromEntity(updated);
+    }
+
+    @DeleteMapping("/{uuid}")
+    public void delete(@PathVariable UUID uuid) {
+        boardService.delete(uuid);
     }
 }
