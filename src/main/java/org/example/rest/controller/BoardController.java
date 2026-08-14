@@ -1,16 +1,14 @@
 package org.example.rest.controller;
 
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.example.rest.domain.entity.BoardEntity;
+import org.example.rest.dto.BoardRequestDTO;
+import org.example.rest.dto.BoardResponseDTO;
 import org.example.rest.service.BoardService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.time.Instant;
-import java.util.UUID;
 
 //@Controller // return시 뷰 이름이나 ModelAndView 등을 통해서 뷰 리졸버 처리를 지시
 @RestController // -> ResponseBody를 알아서 붙여준다
@@ -30,29 +28,5 @@ public class BoardController {
         return BoardResponseDTO.fromEntity(saved);
     }
 
-    public record BoardRequestDTO(String title, String content) {
-        public BoardEntity toEntity() {
-            return BoardEntity.builder()
-                    .title(title)
-                    .content(content)
-                    .build();
-        }
-    }
 
-    @Builder
-    public record BoardResponseDTO(
-            UUID uuid,
-            String title, String content,
-            Instant createdAt, Instant updatedAt
-    ) {
-        static BoardResponseDTO fromEntity(BoardEntity boardEntity) {
-            return BoardResponseDTO.builder()
-                    .uuid(boardEntity.getUuid())
-                    .title(boardEntity.getTitle())
-                    .content(boardEntity.getContent())
-                    .createdAt(boardEntity.getCreatedAt())
-                    .updatedAt(boardEntity.getUpdatedAt())
-                    .build();
-        }
-    }
 }
