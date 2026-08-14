@@ -1,6 +1,8 @@
 package org.example.rest.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +11,10 @@ import org.example.rest.dto.BoardRequestDTO;
 import org.example.rest.dto.BoardResponseDTO;
 import org.example.rest.service.BoardService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,8 +51,20 @@ public class BoardController {
     @ApiResponse(
             responseCode = "201",
             description = "게시글 생성 성공"
+//            content = @Content(schema = @Schema(implementation = BoardResponseDTO.class))
     )
-    public ResponseEntity<BoardResponseDTO> create(@RequestBody BoardRequestDTO boardRequestDTO) {
+    @ApiResponse(
+            responseCode = "400",
+            description = "Validation 미준수",
+            content = @Content(
+//                    mediaType = "application/json",
+//                    mediaType = "application/problem+json",
+                    mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                    schema = @Schema(implementation = ProblemDetail.class))
+    )
+    public ResponseEntity<BoardResponseDTO> create(
+            // MethodArgumentNotValidException -> 기본 내장 ProblemDetail 처리 가능
+            @Validated @RequestBody BoardRequestDTO boardRequestDTO) {
         BoardEntity boardEntity = boardRequestDTO.toEntity();
         BoardEntity saved = boardService.create(boardEntity);
         return ResponseEntity
@@ -85,6 +102,17 @@ public class BoardController {
 
     @GetMapping("/{uuid}")
     @Operation(summary = "게시글 조회", description = "UUID로 개별 조회")
+    @ApiResponse(
+            responseCode = "200",
+            description = "조회 성공"
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "없는 게시글",
+            content = @Content(
+                    mediaType = MediaType.TEXT_PLAIN_VALUE,
+                    schema = @Schema(implementation = String.class))
+    )
     public ResponseEntity<BoardResponseDTO> readOne(@PathVariable UUID uuid) {
         BoardEntity boardEntity = boardService.readOne(uuid);
         return ResponseEntity.ok(BoardResponseDTO.fromEntity(boardEntity));
@@ -141,6 +169,11 @@ public class BoardController {
         // Generic으로 표현해야하므로 비어있다는 void X. Wrapper Void
         boardService.delete(uuid);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/error")
+    public String error() {
+        throw new RuntimeException("아무거나 에러");
     }
 
 //    @ExceptionHandler
