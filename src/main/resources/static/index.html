@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CORS 테스트</title>
+</head>
+<body>
+<h1>CORS 테스트</h1>
+<section id="data">
+
+</section>
+<script>
+    async function getData() {
+        const response = await fetch('http://localhost:8080/board');
+        const data = await response.json();
+        // document.querySelector("#data").textContent = data;
+        document.querySelector("#data").textContent = JSON.stringify(data);
+    }
+
+    getData();
+</script>
+</body>
+</html>
